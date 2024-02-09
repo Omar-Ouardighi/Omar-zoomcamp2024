@@ -50,13 +50,13 @@ docker run -it --entrypoint bash python:3.9
 
 pip list
 ```
-
+```
 Package    Version
 ---------- -------
 pip        23.0.1
 setuptools 58.1.0
 wheel      0.42.0
-
+```
 The answer is : 0.42.0
 
 # Prepare Postgres
@@ -85,6 +85,15 @@ Remember that `lpep_pickup_datetime` and `lpep_dropoff_datetime` columns are in 
 - 15612
 - 15859
 - 89009
+>Answer:
+```
+SELECT COUNT(*)
+FROM green_taxi_data
+WHERE CAST(lpep_pickup_datetime AS DATE) = '2019-09-18'
+AND CAST(lpep_dropoff_datetime AS DATE) = '2019-09-18';
+```
+The answer is : 15612
+
 
 ## Question 4. Longest trip for each day
 
@@ -97,6 +106,13 @@ Tip: For every trip on a single day, we only care about the trip with the longes
 - 2019-09-16
 - 2019-09-26
 - 2019-09-21
+>Answer:
+```
+SELECT CAST(lpep_pickup_datetime AS DATE), trip_distance
+FROM green_taxi_data
+WHERE trip_distance = ( SELECT MAX(trip_distance) FROM green_taxi_data )
+```
+The answer is :  2019-09-26 with 341,64
 
 
 ## Question 5. Three biggest pick up Boroughs
@@ -110,6 +126,16 @@ Which were the 3 pick up Boroughs that had a sum of total_amount superior to 500
 - "Bronx" "Manhattan" "Queens" 
 - "Brooklyn" "Queens" "Staten Island"
 
+>Answer:
+```
+SELECT z."Borough"
+FROM green_taxi_data t
+LEFT JOIN zones z
+ON t."PULocationID" = z."LocationID"
+group by z."Borough", CAST(t.lpep_pickup_datetime AS DATE)
+having SUM(t.total_amount) > 50000 and CAST(t.lpep_pickup_datetime AS DATE) = '2019-09-18' ;
+```
+The answer is : "Brooklyn" "Manhattan" "Queens"
 
 ## Question 6. Largest tip
 
@@ -122,6 +148,21 @@ Note: it's not a typo, it's `tip` , not `trip`
 - Jamaica
 - JFK Airport
 - Long Island City/Queens Plaza
+
+>Answer:
+```
+SELECT z."Zone"
+FROM green_taxi_data t
+LEFT JOIN zones z
+ON t."DOLocationID" = z."LocationID"
+WHERE DATE_TRUNC('month', t.lpep_pickup_datetime) = '2019-09-01'
+AND t."PULocationID" = (
+	select DISTINCT "LocationID" From zones where "Zone"= 'Astoria'
+)
+ORDER BY t.tip_amount DESC
+LIMIT 1;
+```
+The answer is : JFK Airport
 
 
 
