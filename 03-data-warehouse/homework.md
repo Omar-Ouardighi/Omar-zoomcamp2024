@@ -35,7 +35,7 @@ What is the estimated amount of data that will be read when this query is execut
 
 >Answer:
 ```
-- 0 MB for the External Table and 0MB for the Materialized Table
+- 0 MB for the External Table and 6.41MB for the Materialized Table
 ```
 
 ## Question 3:
@@ -76,7 +76,7 @@ Choose the answer which most closely matches.</br>
 
 >Answer:
 ```
-10.31 MB for non-partitioned table and 10.31 MB for the partitioned table
+12.82 MB for non-partitioned table and 1.12 MB for the partitioned table
 ```
 
 ## Question 6: 

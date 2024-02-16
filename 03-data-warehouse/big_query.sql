@@ -36,7 +36,7 @@ FROM `nyc_taxi.green_taxi_2022`;
 -- query to retrieve the distinct PULocationID between lpep_pickup_datetime 06/01/2022 and 06/30/2022
 
 SELECT DISTINCT PULocationID 
-FROM `nyc_taxi.green_taxi_2022`
+FROM `nyc_taxi.green_taxi_2022_non_partiioned`
 WHERE DATE(Lpep_pickup_datetime) BETWEEN '2022-01-06' AND '2022-06-30';
 
 SELECT DISTINCT PULocationID 
